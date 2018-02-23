@@ -16,7 +16,7 @@ connection.connect(function(err) {
   if(err){
     throw err;
   }
-  console.log("connected as id " + connection.threadId);
+  //console.log("connected as id " + connection.threadId);
 
   readProducts();
 });
@@ -48,7 +48,7 @@ function run() {
     {
     type: "checkbox",
     name: "option",
-    message: "What product would you like to buy? (Select ID)",
+    message: "What product would you like to buy? (Select a product)",
     choices: productName
     }
   ]).then(function(response) {
