@@ -1,7 +1,9 @@
-//npm
+//npm packages
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 
+
+//connection setup to database
 var connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
@@ -19,13 +21,13 @@ connection.connect(function(err) {
   readProducts();
 });
 
-//global
+//global variables
 var productName = [];
 var price;
 var unitID;
 var quantity;
 
-//run the initial prompt
+//read the table to push product names into an array
 function readProducts() {
   var query = "SELECT item_id, product_name, price FROM products"
   connection.query(query, function(err, res) {
@@ -35,12 +37,11 @@ function readProducts() {
       productName.push(`${res[i].product_name}`);
       //price.push(`Price: $${res[i].price}`);
     }
-
     run();
-
   });
 };
 
+// ask for user input to determine what they would like to purchase
 function run() {
   //console.log(updatedUnits);
   inquirer.prompt([
@@ -53,7 +54,6 @@ function run() {
   ]).then(function(response) {
 
     //console.log(response.option);
-    //var work = parseInt(response.option)
 
     var query = connection.query("SELECT * FROM products WHERE product_name=?", response.option, function(err, res) {
       if (err) throw err;
@@ -64,8 +64,8 @@ function run() {
       unitID = parseInt(res[0].ID);
       price = parseInt(res[0].price);
 
-      console.log(unitID);
-      console.log(quantity);
+      //console.log(unitID);
+      //console.log(quantity);
 
       userBuy();
     });
@@ -73,6 +73,7 @@ function run() {
   });
 }
 
+//ask the user the amount of unit they would like to buy
 function buy() {
   inquirer.prompt([
     {
@@ -116,6 +117,7 @@ function buy() {
 
 }
 
+//ask the user if they would indeed like to purchase some of the product
 function userBuy() {
   inquirer.prompt([
     {
@@ -137,7 +139,7 @@ function userBuy() {
 }
 
 
-
+//ask them if they would like to continue shopping
 function again() {
   inquirer.prompt([
     {
